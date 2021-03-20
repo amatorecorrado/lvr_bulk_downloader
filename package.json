@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
+    "start": "tsc && node dist/src/index.js",
     "build": "tsc",
+    "customtest": "tsc && node dist/src/test.js",
     "test": "mocha"
   },
   "repository": {

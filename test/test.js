@@ -28,11 +28,11 @@ describe('Array', function() {
       };
       
       var downloader = new Downloader.Downloader(options);
-      downloader.run(files, function (output) {
+      await downloader.run(files, function (output) {
           var errorCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == Downloader.Status.KO; }).length;
           var downloadedCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == Downloader.Status.OK; }).length;
           console.debug("Downloaded " + downloadedCount + " files with " + errorCount + " errors");
-          assert.strictEqual(downloadedCount, 10);
+          assert.strictEqual(downloadedCount, 11);
         });
     });
   });
