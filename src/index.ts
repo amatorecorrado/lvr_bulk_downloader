@@ -45,7 +45,8 @@ export module Downloader{
             const parent = this;
             if(this.files instanceof Array && this.files.length > 0){
                 const file = this.files[0];
-                await download(file.url, file.path).then(async (response: any) => {
+                //await download(file.url, file.path).then(async (response: any) => {
+                await _download(file.url, file.path, async function(response: Response){
                     file.times += 1;
                     file.response = response
                     if(response.status == Status.OK){
@@ -97,26 +98,21 @@ export module Downloader{
             }
             file = fs.createWriteStream(filePath)
             resp.pipe(file)
-            file.on('close', () => {
+            // The destination stream is ended by the time it's called
+            file.on('finish', () => {
+                file.close()
                 callback(new Response(Status.OK));
             });
-            //callback(new Response(Status.OK));
+
+            /* file.on('close', () => {
+                callback(new Response(Status.OK));
+            }); */
+            
         });
 
         // The destination stream is ended by the time it's called
         request.on('error', (err: any) => {
             callback(new Response(Status.KO, err));
-            return;
-        });
-
-        // The destination stream is ended by the time it's called
-        file.on('finish', () => {
-            file.close()
-            callback(new Response(Status.OK));
-        });
-
-        file.on('close', () => {
-            callback(new Response(Status.OK));
         });
 
         file.on('error', (err: any) => {
@@ -129,7 +125,6 @@ export module Downloader{
         request.end();
     } catch (error) {
         callback( new Response(Status.KO, error));
-        return;
     }
 
 }
