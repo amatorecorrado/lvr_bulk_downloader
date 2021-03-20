@@ -45,7 +45,7 @@ export module Downloader{
             const parent = this;
             if(this.files instanceof Array && this.files.length > 0){
                 const file = this.files[0];
-                await download(file.url, file.path, function(response: Response){
+                await download(file.url, file.path).then(async (response: any) => {
                     file.times += 1;
                     file.response = response
                     if(response.status == Status.OK){
@@ -81,7 +81,7 @@ export module Downloader{
      * Downloads file from remote HTTP[S] host and puts its contents to the
      * specified location.
      */
-    async function download(url: String, filePath: String, callback: (resp: Response) => void) {
+    async function _download(url: String, filePath: String, callback: (resp: Response) => void) {
     const proto = getProtocol(url);
     try {
         var dir = path.dirname(filePath) + "/";
@@ -97,6 +97,9 @@ export module Downloader{
             }
             file = fs.createWriteStream(filePath)
             resp.pipe(file)
+            file.on('close', () => {
+                callback(new Response(Status.OK));
+            });
             //callback(new Response(Status.OK));
         });
 
@@ -109,6 +112,10 @@ export module Downloader{
         // The destination stream is ended by the time it's called
         file.on('finish', () => {
             file.close()
+            callback(new Response(Status.OK));
+        });
+
+        file.on('close', () => {
             callback(new Response(Status.OK));
         });
 
@@ -125,19 +132,20 @@ export module Downloader{
         return;
     }
 
-/*     return
+}
+async function download(url: String, filePath: String) {
         return new Promise((resolve, reject) => {
+            const proto = getProtocol(url);
             try {
                 var dir = path.dirname(filePath) + "/";
                 fs.mkdir(dir, { recursive: true }, (err: any) => {
                     if (err) throw err;
                 });
-                const file = fs.createWriteStream(filePath);
                 var fileInfo: Nullable<DownloaderFileInfo> = null;
-
-                const request = proto.get(url, function(response: DownloaderResponse) {
+                var file: any;
+                const request = proto.get(url, function(response: any) {
                     if (response.statusCode !== 200) {
-                        reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
+                        reject(new Response(Status.KO, response.statusCode));
                         return;
                     }
 
@@ -145,31 +153,31 @@ export module Downloader{
                         mime: response.headers['content-type'],
                         size: parseInt(response.headers['content-length'], 10),
                     };
-
+                    file = fs.createWriteStream(filePath)
                     response.pipe(file);
-                });
 
-                // The destination stream is ended by the time it's called
-                file.on('finish', () => {
-                    file.close()
-                    resolve(fileInfo)
+                    // The destination stream is ended by the time it's called
+                    file.on('finish', () => {
+                        file.close()
+                        resolve(new Response(Status.OK))
+                    });
+
+                    file.on('error', (err: any) => {
+                        file.close()
+                        fs.unlink(filePath, () => reject(new Response(Status.KO, err)));
+                    });
                 });
 
                 request.on('error', (err: any) => {
                     file.close()
-                    fs.unlink(filePath, () => reject(err));
-                });
-
-                file.on('error', (err: any) => {
-                    file.close()
-                    fs.unlink(filePath, () => reject(err));
-                });
+                    fs.unlink(filePath, () => reject(new Response(Status.KO, err)));
+                }); 
                 request.end();
 
             } catch (error) {
-                fs.unlink(filePath, () => reject(error));
+                fs.unlink(filePath, () => reject(new Response(Status.KO, error)));
             }
-        }); */
+        });
     }
 
     function log(msg: string, options: Options, debug: DebugMode){
