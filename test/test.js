@@ -20,7 +20,7 @@ var files =  [
 var assert = require('assert');
 describe('Array', function() {
   describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', async () => {
+    it('Download 11 files', async () => {
       const options = {
           retry_times: 3,
           mode: Downloader.Mode.SYNC,
@@ -34,6 +34,6 @@ describe('Array', function() {
           console.debug("Downloaded " + downloadedCount + " files with " + errorCount + " errors");
           assert.strictEqual(downloadedCount, 11);
         });
-    });
+    }).timeout(2000);
   });
 });
