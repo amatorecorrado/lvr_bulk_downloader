@@ -24,8 +24,7 @@ export module Downloader{
             this.total_files = files.length
             this.files = files
 
-            this.recorsiveFunction(callback)
-
+            await this.recorsiveFunction(callback)
             /* for (var index = 0; index < this.files.length; index++) {
                 const file = this.files[index];
                 var response = await download(file.url, file.path,function(){})
