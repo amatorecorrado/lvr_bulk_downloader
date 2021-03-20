@@ -58,8 +58,9 @@ export module Downloader{
                         parent.output_files.push(parent.files.splice(0, 1)[0]);
                         log("File skypped: " + file.url, parent.options, DebugMode.DEBUG)
                     }
-                    parent.recorsiveFunction(callback)
-                })
+                    await parent.recorsiveFunction(callback)
+                });
+                
             }else{
                 let errorCount = parent.output_files.filter(x=>x.response?.status == Status.KO).length;
                 let retryCount = parent.output_files.filter(x=>x.times > 1).length;
@@ -70,7 +71,7 @@ export module Downloader{
                 " files, " + errorCount + 
                 " errors and " + retryCount + " retried", parent.options, DebugMode.LOG)
                 //callback(parent.output_files)
-                return parent.output_files
+                callback(parent.output_files)
             }
         }
     }
