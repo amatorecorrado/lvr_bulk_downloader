@@ -8,11 +8,8 @@ export class Downloader{
     output_files: File[] = [];
     total_files: number = 0;
 
-    options: Options = {
-        retry_times: 3,
-        mode: Mode.SYNC,
-        debug_mode: DebugMode.NONE
-    };
+    options: Options
+
     constructor(options: Options){
         this.options = options;
     }
@@ -29,7 +26,17 @@ export class Downloader{
         const parent = this;
         if(this.files instanceof Array && this.files.length > 0){
             const file = this.files[0];
-            await this.download(file.url, file.path).then(async (response: any) => {
+
+            var outputDir = this.options.output_directory
+
+            var outputFile: string
+            if(file.path != null){
+                outputFile = file.path
+            }else{
+                outputFile = outputDir + path.basename(file)
+            }
+
+            await this.download(file.url, outputFile).then(async (response: any) => {
                 file.times += 1;
                 file.response = response
                 if(response.status == Status.OK){
@@ -121,10 +128,10 @@ interface FileInfo{
     size: Number
 }
 
-export interface Options{
-    retry_times: number
-    mode: Mode
-    debug_mode: DebugMode
+export class Options{
+    retry_times: number = 3
+    debug_mode: DebugMode = DebugMode.LOG
+    output_directory: string = './download/' //MUST BE SET IN CASE OF FLAT MODE
 }
 
 export enum DebugMode{
@@ -133,16 +140,12 @@ export enum DebugMode{
     LOG
 }
 
-export enum Mode{
-    SYNC
-}
-
 export class File{
     url: string
-    path: string
+    path: string | null
     times: number
     response: Response | null
-    constructor(u: string, p: string, t: number = 0, r: Response | null = null){
+    constructor(u: string, p: string | null, t: number = -1, r: Response | null = null){
         this.url = u
         this.path = p
         this.times = t

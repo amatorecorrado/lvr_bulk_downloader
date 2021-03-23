@@ -1,4 +1,4 @@
-import { DebugMode, Downloader, File, Mode, Options, Status } from ".";
+import { DebugMode, Downloader, File, Options, Status } from ".";
 
 const fileURL =  "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg"
 
@@ -16,11 +16,9 @@ var files =  [
   new File(fileURL, "./download/9/image.jpg")
 ]
 
-const options: Options = {
-    retry_times: 3,
-    mode: Mode.SYNC,
-    debug_mode: DebugMode.DEBUG
-};
+const options = new Options()
+options.output_directory = './download/'
+options.debug_mode == DebugMode.DEBUG
 
 async function test(){
     var downloader = new Downloader(options)

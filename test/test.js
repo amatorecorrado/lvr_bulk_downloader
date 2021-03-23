@@ -1,4 +1,4 @@
-const {Downloader, File, Mode, DebugMode, Status} = require('../dist/src/index')
+const {Downloader, File, DebugMode, Status} = require('../dist/src/index')
 
 const fileURL =  "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg"
 
@@ -22,8 +22,6 @@ describe('Array', function() {
   describe('#indexOf()', function() {
     it('Download 11 files', async () => {
       const options = {
-          retry_times: 3,
-          mode: Mode.SYNC,
           debug_mode: DebugMode.DEBUG
       };
       
