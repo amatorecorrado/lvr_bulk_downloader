@@ -15,14 +15,14 @@ export class Downloader{
     }
     
     atLeastOne = false;
-    async run(files: File[], callback: (files: File[]) => void){
+    async run(files: File[], callback: ((files: File[]) => void) | null){
         this.total_files = files.length
         this.files = files
 
         await this.checkAndDownload(callback)
     }
 
-    async checkAndDownload(callback: (files: File[]) => void){
+    async checkAndDownload(callback: ((files: File[]) => void) | null){
         const parent = this;
         if(this.files instanceof Array && this.files.length > 0){
             const file = this.files[0];
@@ -61,7 +61,9 @@ export class Downloader{
             " files, " + errorCount + 
             " errors and " + retryCount + " retried", parent.options, DebugMode.LOG)
             //callback(parent.output_files)
-            callback(parent.output_files)
+            if(callback != null){
+                callback(parent.output_files)
+            }
         }
     }
 
