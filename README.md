@@ -24,7 +24,7 @@
 
 <br>
 
-## Simple use
+## Simple bulk downalod use
 
 <br>
 
@@ -39,7 +39,7 @@
 
 <br>
 
-## Complex use
+## Complex bulk download use
 
 <br>
 
@@ -56,12 +56,15 @@
     options.retry_times = 3;
 
     const downloader = new Downloader(options);
-    downloader.run(files);
+    downloader.run(files, function(output: File[]){
+        const downloadedCount = output.filter(x=>x.response?.status == Status.OK).length;
+        const errorCount = output.filter(x=>x.response?.status == Status.KO).length;
+    });
 ```
 
 <br>
 
-## Single download use
+## Single file download use
 
 <br>
 
@@ -72,3 +75,61 @@
 ```
 
 <br>
+<br>
+<br>
+
+## Types definition
+
+<br>
+
+### File
+
+> url: string
+>
+> path: string | null
+>
+> retry_times: number
+>
+> response: Response | null
+>
+
+<br>
+
+### Options
+
+> retry_times: number = 3
+>
+> debug_mode: DebugMode = DebugMode.LOG
+>
+> output_directory: string = './download/'
+>
+
+<br>
+
+
+### Response
+
+> status: Status;
+>
+> message: any;
+>
+
+<br>
+
+```typescript
+enum Status{
+    OK,
+    KO
+}
+```
+
+
+<br>
+
+```typescript
+enum DebugMode{
+    NONE,
+    DEBUG,
+    LOG
+}
+```
