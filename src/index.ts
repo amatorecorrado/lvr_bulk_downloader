@@ -8,21 +8,21 @@ export class Downloader{
     output_files: File[] = [];
     total_files: number = 0;
 
-    options: Options
+    options = new Options()
 
-    constructor(options: Options){
-        this.options = options;
+    constructor(options: Options | null = null){
+        if(options) this.options = options;
     }
     
     atLeastOne = false;
-    async run(files: File[], callback: ((files: File[]) => void) | null){
+    async run(files: File[], callback: ((files: File[]) => void) | null = null){
         this.total_files = files.length
         this.files = files
 
         await this.checkAndDownload(callback)
     }
 
-    async checkAndDownload(callback: ((files: File[]) => void) | null){
+    async checkAndDownload(callback: ((files: File[]) => void) | null = null){
         const parent = this;
         if(this.files instanceof Array && this.files.length > 0){
             const file = this.files[0];
@@ -147,7 +147,7 @@ export class File{
     path: string | null
     times: number
     response: Response | null
-    constructor(u: string, p: string | null, t: number = -1, r: Response | null = null){
+    constructor(u: string, p: string | null = null, t: number = -1, r: Response | null = null){
         this.url = u
         this.path = p
         this.times = t
