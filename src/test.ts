@@ -27,11 +27,15 @@ async function test(){
         let errorCount = output.filter(x=>x.response?.status == Status.KO).length;
         console.debug("Downloaded " + downloadedCount + " files with " + errorCount + " errors");
     })
-    /* downloader.run(files, function(output: Downloader.File[]){
-        var downloadedCount = output.filter(x=>x.response?.status == Downloader.Status.OK).length;
-        let errorCount = output.filter(x=>x.response?.status == Downloader.Status.KO).length;
-        console.debug("Downloaded " + downloadedCount + " files with " + errorCount + " errors");
-    }) */
 }
 
 test()
+
+function easyTest() {
+    var files =  [ new File(fileURL) ]
+    var downloader = new Downloader()
+    downloader.run(files)
+}
+
+easyTest()
+
