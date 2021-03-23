@@ -16,12 +16,13 @@ var files =  [
   new File(fileURL, "./download/9/image.jpg")
 ]
 
-const options = new Options()
-options.output_directory = './download/'
-options.debug_mode == DebugMode.DEBUG
+const options = new Options();
+options.output_directory = './download/';
+options.debug_mode = DebugMode.DEBUG;
+options.retry_times = 3;
 
 async function test(){
-    var downloader = new Downloader(options)
+    const downloader = new Downloader(options)
     await downloader.run(files, function(output: File[]){
         var downloadedCount = output.filter(x=>x.response?.status == Status.OK).length;
         let errorCount = output.filter(x=>x.response?.status == Status.KO).length;
@@ -29,13 +30,18 @@ async function test(){
     })
 }
 
-test()
-
-function easyTest() {
-    var files =  [ new File(fileURL) ]
-    var downloader = new Downloader()
-    downloader.run(files)
+async function easyTest() {
+    const files =  [ new File(fileURL) ]
+    const downloader = new Downloader()
+    await downloader.run(files)
 }
 
-easyTest()
+async function singleTest() {
+    const files =  new File(fileURL)
+    const downloader = new Downloader()
+    await downloader.run(files)
+}
 
+singleTest()
+easyTest()
+test()
