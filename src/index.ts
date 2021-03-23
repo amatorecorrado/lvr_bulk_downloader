@@ -44,14 +44,14 @@ export class Downloader{
             }
 
             await this.download(file.url, outputFile).then(async (response: any) => {
-                file.times += 1;
+                file.retry_times += 1;
                 file.response = response
                 if(response.status == Status.OK){
                     parent.output_files.push(parent.files.splice(0, 1)[0]);
                     let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
                     this.log("File downloaded correctly: " + file.url, parent.options, DebugMode.DEBUG)
                     this.log("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options, DebugMode.LOG)
-                }else if(response.status == Status.KO && file.times == parent.options.retry_times){
+                }else if(response.status == Status.KO && file.retry_times == parent.options.retry_times){
                     parent.output_files.push(parent.files.splice(0, 1)[0]);
                     this.log("File skypped: " + file.url, parent.options, DebugMode.DEBUG)
                 }
@@ -60,7 +60,7 @@ export class Downloader{
             
         }else{
             let errorCount = parent.output_files.filter(x=>x.response?.status == Status.KO).length;
-            let retryCount = parent.output_files.filter(x=>x.times > 1).length;
+            let retryCount = parent.output_files.filter(x=>x.retry_times > 1).length;
             let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
 
 
@@ -158,12 +158,12 @@ export enum DebugMode{
 export class File{
     url: string
     path: string | null
-    times: number
+    retry_times: number
     response: Response | null
     constructor(u: string, p: string | null = null, t: number = -1, r: Response | null = null){
         this.url = u
         this.path = p
-        this.times = t
+        this.retry_times = t
         this.response = r
     }
 }
