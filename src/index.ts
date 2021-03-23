@@ -33,7 +33,7 @@ export class Downloader{
             if(file.path != null){
                 outputFile = file.path
             }else{
-                outputFile = outputDir + path.basename(file)
+                outputFile = outputDir + path.basename(file.url)
             }
 
             await this.download(file.url, outputFile).then(async (response: any) => {
