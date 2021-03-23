@@ -15,11 +15,18 @@ export class Downloader{
     }
     
     atLeastOne = false;
-    async run(files: File[], callback: ((files: File[]) => void) | null = null){
-        this.total_files = files.length
-        this.files = files
+    async run(files: File[] | File, callback: ((files: File[]) => void) | null = null){
+        if(files instanceof File){
+            this.total_files = 1
+            this.files.push(files)
+        }else{  
+            this.total_files = files.length
+            this.files = files
+        }
 
         await this.checkAndDownload(callback)
+
+        this.clear()
     }
 
     async checkAndDownload(callback: ((files: File[]) => void) | null = null){
@@ -113,14 +120,20 @@ export class Downloader{
         });
     }
 
+    getProtocol(url: String){
+        return !url.charAt(4).localeCompare('s') ? https : http;
+    }
+
+    clear() {
+        this.files = [];
+        this.output_files = [];
+        this.total_files = 0;
+    }
+
     log(msg: string, options: Options, debug: DebugMode){
         if(options.debug_mode == DebugMode.DEBUG || options.debug_mode == debug){
             console.log("Downloader --> " + msg);
         }
-    }
-
-    getProtocol(url: String){
-        return !url.charAt(4).localeCompare('s') ? https : http;
     }
 
 }
