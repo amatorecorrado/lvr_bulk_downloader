@@ -46,8 +46,8 @@
 ```typescript
     const files =  [ 
         new File('http://host.domain/dir/file.ext', './download/file.ext'), 
-        new File('http://host.domain/dir/file2.ext', "./download/dir/file2.ext"), 
-        new File('http://host.domain/dir/file3.ext', "./download/dir/file3.ext")
+        new File('http://host.domain/dir/file2.ext', './download/dir/file2.ext'), 
+        new File('http://host.domain/dir/file3.ext', './download/dir/file3.ext')
         ];
     
     const options = new Options();
