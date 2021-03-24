@@ -2,6 +2,11 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+
+import {Options, DebugMode} from './options'
+import {InputFile} from './input_file'
+import {OutputFile, FileInfo, Response, Status} from './output_file'
+import {Log} from './log'
     
 export class Downloader{
     files: InputFile[] = [];
@@ -51,12 +56,12 @@ export class Downloader{
                     parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
                     parent.output_files.push(output_file);
                     let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
-                    this.log("File downloaded correctly: " + output_file.url, parent.options, DebugMode.DEBUG)
-                    this.log("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options, DebugMode.LOG)
+                    Log.write("File downloaded correctly: " + output_file.url, parent.options.debug_mode, DebugMode.DEBUG)
+                    Log.write("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options.debug_mode, DebugMode.LOG)
                 }else if(response.status == Status.KO && output_file.retry_times == parent.options.retry_times){
                     parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
                     parent.output_files.push(output_file);
-                    this.log("File skypped: " + output_file.url, parent.options, DebugMode.DEBUG)
+                    Log.write("File skypped: " + output_file.url, parent.options.debug_mode, DebugMode.DEBUG)
                 }
                 await parent.checkAndDownload(callback)
             });
@@ -66,10 +71,11 @@ export class Downloader{
             let retryCount = parent.output_files.filter(x=>x.retry_times > 1).length;
             let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
 
+            Log.write("Downloaded "+ dowloadedCount + 
+                    " files, " + errorCount + 
+                    " errors and " + retryCount + " retried", 
+                    parent.options.debug_mode, DebugMode.LOG)
 
-            this.log("Downloaded "+ dowloadedCount + 
-            " files, " + errorCount + 
-            " errors and " + retryCount + " retried", parent.options, DebugMode.LOG)
             //callback(parent.output_files)
             if(callback != null){
                 callback(parent.output_files)
@@ -132,64 +138,14 @@ export class Downloader{
         this.output_files = [];
         this.total_files = 0;
     }
-
-    log(msg: string, options: Options, debug: DebugMode){
-        if(options.debug_mode == DebugMode.DEBUG || options.debug_mode == debug){
-            console.log("Downloader --> " + msg);
-        }
-    }
-
 }
 
-interface FileInfo{
-    mime: String
-    size: Number
-}
-
-export class Options{
-    retry_times: number = 3
-    debug_mode: DebugMode = DebugMode.LOG
-    output_directory: string = './download/' //MUST BE SET IN CASE OF FLAT MODE
-}
-
-export enum DebugMode{
-    NONE,
-    DEBUG,
-    LOG
-}
-
-export class InputFile{
-    url: string
-    path: string | null
-    constructor(u: string, p: string | null = null, t: number = -1, r: Response | null = null){
-        this.url = u
-        this.path = p
-    }
-}
-
-export class OutputFile{
-    url: string
-    path: string | null
-    retry_times: number
-    response: Response | null
-    constructor(u: string, p: string | null = null, t: number = -1, r: Response | null = null){
-        this.url = u
-        this.path = p
-        this.retry_times = t
-        this.response = r
-    }
-}
-
-export enum Status{
-    OK,
-    KO
-}
-
-export class Response {
-    status: Status; //OK,KO
-    message: any;
-    constructor(s: Status, m: any = null){
-            this.status = s
-            this.message = m
-    }
+export {
+    InputFile,
+    OutputFile,
+    FileInfo,
+    DebugMode,
+    Options,
+    Response,
+    Status
 }
