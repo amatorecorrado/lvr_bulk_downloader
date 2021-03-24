@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
     
 export class Downloader{
-    files: File[] = [];
-    output_files: File[] = [];
+    files: InputFile[] = [];
+    output_files: OutputFile[] = [];
     total_files: number = 0;
 
     options = new Options()
@@ -15,8 +15,8 @@ export class Downloader{
     }
     
     atLeastOne = false;
-    async run(files: File[] | File, callback: ((files: File[]) => void) | null = null){
-        if(files instanceof File){
+    async run(files: InputFile[] | InputFile, callback: ((files: OutputFile[]) => void) | null = null){
+        if(files instanceof InputFile){
             this.total_files = 1
             this.files.push(files)
         }else{  
@@ -29,31 +29,34 @@ export class Downloader{
         this.clear()
     }
 
-    async checkAndDownload(callback: ((files: File[]) => void) | null = null){
+    async checkAndDownload(callback: ((files: OutputFile[]) => void) | null = null){
         const parent = this;
         if(this.files instanceof Array && this.files.length > 0){
-            const file = this.files[0];
+            const output_file = new OutputFile(this.files[0].url, this.files[0].path);
 
             var outputDir = this.options.output_directory
 
-            var outputFile: string
-            if(file.path != null){
-                outputFile = file.path
+            var outputFileName: string
+            if(output_file.path != null){
+                outputFileName = output_file.path
             }else{
-                outputFile = outputDir + path.basename(file.url)
+                outputFileName = outputDir + path.basename(output_file.url)
             }
+            output_file.path = outputFileName
 
-            await this.download(file.url, outputFile).then(async (response: any) => {
-                file.retry_times += 1;
-                file.response = response
+            await this.download(output_file.url, output_file.path).then(async (response: any) => {
+                output_file.retry_times += 1;
+                output_file.response = response
                 if(response.status == Status.OK){
-                    parent.output_files.push(parent.files.splice(0, 1)[0]);
+                    parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
+                    parent.output_files.push(output_file);
                     let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
-                    this.log("File downloaded correctly: " + file.url, parent.options, DebugMode.DEBUG)
+                    this.log("File downloaded correctly: " + output_file.url, parent.options, DebugMode.DEBUG)
                     this.log("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options, DebugMode.LOG)
-                }else if(response.status == Status.KO && file.retry_times == parent.options.retry_times){
-                    parent.output_files.push(parent.files.splice(0, 1)[0]);
-                    this.log("File skypped: " + file.url, parent.options, DebugMode.DEBUG)
+                }else if(response.status == Status.KO && output_file.retry_times == parent.options.retry_times){
+                    parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
+                    parent.output_files.push(output_file);
+                    this.log("File skypped: " + output_file.url, parent.options, DebugMode.DEBUG)
                 }
                 await parent.checkAndDownload(callback)
             });
@@ -155,7 +158,16 @@ export enum DebugMode{
     LOG
 }
 
-export class File{
+export class InputFile{
+    url: string
+    path: string | null
+    constructor(u: string, p: string | null = null, t: number = -1, r: Response | null = null){
+        this.url = u
+        this.path = p
+    }
+}
+
+export class OutputFile{
     url: string
     path: string | null
     retry_times: number

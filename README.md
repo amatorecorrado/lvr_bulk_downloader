@@ -1,10 +1,10 @@
 # LVR Bulk Downloader
 
-## Download it's very easy
+## Easy downloading...
 
 <br>
 
-***Tested with 17000 files in input, totaling about 17GB without an error***
+***Tested with 17000 files in input, about 17GB downloaded without an error.***
 
 <br>
 
@@ -82,7 +82,16 @@
 
 <br>
 
-### File
+### InputFile
+
+> url: string
+>
+> path: string | null
+>
+
+<br>
+
+### OutputFile
 
 > url: string
 >
