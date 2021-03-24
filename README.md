@@ -30,8 +30,8 @@
 
 ```typescript
     const files =  [ 
-        new File('http://host.domain/dir/file.ext'), 
-        new File('http://host.domain/dir/file2.ext')
+        new InputFile('http://host.domain/dir/file.ext'), 
+        new InputFile('http://host.domain/dir/file2.ext')
         ];
     const downloader = new Downloader();
     downloader.run(files);
@@ -45,9 +45,9 @@
 
 ```typescript
     const files =  [ 
-        new File('http://host.domain/dir/file.ext', './download/file.ext'), 
-        new File('http://host.domain/dir/file2.ext', './download/dir/file2.ext'), 
-        new File('http://host.domain/dir/file3.ext', './download/dir/file3.ext')
+        new InputFile('http://host.domain/dir/file.ext', './download/file.ext'), 
+        new InputFile('http://host.domain/dir/file2.ext', './download/dir/file2.ext'), 
+        new InputFile('http://host.domain/dir/file3.ext', './download/dir/file3.ext')
         ];
     
     const options = new Options();
@@ -56,7 +56,7 @@
     options.retry_times = 3;
 
     const downloader = new Downloader(options);
-    downloader.run(files, function(output: File[]){
+    downloader.run(files, function(output: OutputFile[]){
         const downloadedCount = output.filter(x=>x.response?.status == Status.OK).length;
         const errorCount = output.filter(x=>x.response?.status == Status.KO).length;
     });
@@ -69,7 +69,7 @@
 <br>
 
 ```typescript
-    var file = new File('http://host.domain/dir/file.ext');
+    var file = new InputFile('http://host.domain/dir/file.ext');
     var downloader = new Downloader();
     downloader.run(file);
 ```
