@@ -53,6 +53,9 @@ export class Downloader{
                 output_file.retry_times += 1;
                 output_file.response = response
                 if(response.status == Status.OK){
+                    output_file.fileInfo = response.message
+                    response.message = null
+                    output_file.response = response
                     parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
                     parent.output_files.push(output_file);
                     let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
@@ -91,7 +94,6 @@ export class Downloader{
                 fs.mkdir(dir, { recursive: true }, (err: any) => {
                     if (err) throw err;
                 });
-                var file: any;
                 const request = proto.get(url, function(response: any) {
                     if (response.statusCode !== 200) {
                         reject(new Response(Status.KO, response.statusCode));
@@ -102,13 +104,13 @@ export class Downloader{
                         mime: response.headers['content-type'],
                         size: parseInt(response.headers['content-length'], 10),
                     };
-                    file = fs.createWriteStream(filePath)
+                    const file = fs.createWriteStream(filePath)
                     response.pipe(file);
 
                     // The destination stream is ended by the time it's called
                     file.on('finish', () => {
                         file.close()
-                        resolve(new Response(Status.OK))
+                        resolve(new Response(Status.OK, fileInfo))
                     });
 
                     file.on('error', (err: any) => {
@@ -118,7 +120,6 @@ export class Downloader{
                 });
 
                 request.on('error', (err: any) => {
-                    file.close()
                     fs.unlink(filePath, () => reject(new Response(Status.KO, err)));
                 }); 
                 request.end();
