@@ -18,20 +18,18 @@ var files =  [
 
 
 var assert = require('assert');
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('Download 11 files', async () => {
-      const options = {
-          debug_mode: DebugMode.DEBUG
-      };
-      
-      var downloader = new Downloader(options);
-      await downloader.run(files, function (output) {
-          var errorCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == Status.KO; }).length;
-          var downloadedCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == Status.OK; }).length;
-          console.debug("Downloaded " + downloadedCount + " files with " + errorCount + " errors");
-          assert.strictEqual(downloadedCount, 11);
-        });
-    }).timeout(2000);
-  });
+describe('Bulk download', function() {
+  it('Download 11 files', async () => {
+    const options = {
+        debug_mode: DebugMode.DEBUG
+    };
+    
+    var downloader = new Downloader(options);
+    await downloader.run(files, function (output) {
+        var errorCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == Status.KO; }).length;
+        var downloadedCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == Status.OK; }).length;
+        console.debug("Downloaded " + downloadedCount + " files with " + errorCount + " errors");
+        assert.strictEqual(downloadedCount, 11);
+      });
+  }).timeout(2000);
 });
