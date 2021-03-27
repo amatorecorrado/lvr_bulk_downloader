@@ -18,8 +18,7 @@
 >
 > - Sync or Async download;
 >
-> - Output response for all files;
-> <br>
+> - Output response for all files downloaded;
 <br>
 
 <br>
@@ -60,6 +59,21 @@
         const downloadedCount = output.filter(x=>x.response?.status == Status.OK).length;
         const errorCount = output.filter(x=>x.response?.status == Status.KO).length;
     });
+```
+
+<br>
+
+## For sync download adding await to run function
+
+<br>
+
+```typescript
+    const files =  [ 
+        new InputFile('http://host.domain/dir/file.ext'), 
+        new InputFile('http://host.domain/dir/file2.ext')
+        ];
+    const downloader = new Downloader();
+    await downloader.run(files);
 ```
 
 <br>
