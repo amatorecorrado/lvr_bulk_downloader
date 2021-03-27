@@ -49,26 +49,34 @@ export class Downloader{
             }
             output_file.path = outputFileName
 
-            await this.download(output_file.url, output_file.path).then(async (response: any) => {
-                output_file.retry_times += 1;
-                output_file.response = response
-                if(response.status == Status.OK){
-                    output_file.fileInfo = response.message
-                    response.message = null
+            try {
+                await this.download(output_file.url, output_file.path).then(async (response: any) => {
+                    output_file.retry_times += 1;
                     output_file.response = response
-                    parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
-                    parent.output_files.push(output_file);
-                    let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
-                    Log.write("File downloaded correctly: " + output_file.url, parent.options.debug_mode, DebugMode.DEBUG)
-                    Log.write("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options.debug_mode, DebugMode.LOG)
-                }else if(response.status == Status.KO && output_file.retry_times == parent.options.retry_times){
-                    parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
-                    parent.output_files.push(output_file);
-                    Log.write("File skypped: " + output_file.url, parent.options.debug_mode, DebugMode.DEBUG)
-                }
+                    if(response.status == Status.OK){
+                        output_file.fileInfo = response.message
+                        response.message = null
+                        output_file.response = response
+                        parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
+                        parent.output_files.push(output_file);
+                        let dowloadedCount = parent.output_files.filter(x=>x.response?.status == Status.OK).length;
+                        Log.write("File downloaded correctly: " + output_file.url, parent.options.debug_mode, DebugMode.DEBUG)
+                        Log.write("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options.debug_mode, DebugMode.LOG)
+                    }else if(response.status == Status.KO && output_file.retry_times == parent.options.retry_times){
+                        parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
+                        parent.output_files.push(output_file);
+                        Log.write("File skypped: url: " + output_file.url + " ,output_path: " + output_file.path, parent.options.debug_mode, DebugMode.DEBUG)
+                    }
+                    await parent.checkAndDownload(callback)
+                });
+            } catch (error) {
+                output_file.retry_times += 1;
+                output_file.response = new Response(Status.KO, error)
+                parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
+                parent.output_files.push(output_file);
+                Log.write("File skypped: url: " + output_file.url + " ,output_path: " + output_file.path, parent.options.debug_mode, DebugMode.DEBUG)
                 await parent.checkAndDownload(callback)
-            });
-            
+            }   
         }else{
             let errorCount = parent.output_files.filter(x=>x.response?.status == Status.KO).length;
             let retryCount = parent.output_files.filter(x=>x.retry_times > 1).length;
