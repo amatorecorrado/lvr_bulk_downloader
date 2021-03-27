@@ -37,7 +37,7 @@ export class Downloader{
     async checkAndDownload(callback: ((files: OutputFile[]) => void) | null = null){
         const parent = this;
         if(this.files instanceof Array && this.files.length > 0){
-            const output_file = new OutputFile(this.files[0].url, this.files[0].path);
+            const output_file = new OutputFile(this.files[0].url, this.files[0].output_path);
 
             var outputDir = this.options.output_directory
 

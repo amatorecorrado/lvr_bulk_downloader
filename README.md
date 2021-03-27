@@ -86,7 +86,7 @@
 
 > url: string
 >
-> path: string | null
+> output_path: string | null    //This attribute overwrite output_directory defined on options only for this file. 
 >
 
 <br>
