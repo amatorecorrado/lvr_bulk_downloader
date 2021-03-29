@@ -1,6 +1,6 @@
 {
   "name": "lvr_bulk_downloader",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Bulk downloader sync or async, retring configuration and flat or tree directories output.",
   "keywords": [
     "downloader",
@@ -27,7 +27,7 @@
     "type": "git",
     "url": "git+https://github.com/amatorecorrado/lvr_bulk_downloader.git"
   },
-  "author": "Corrado Amatore",
+  "author": "Corrado Amatore <corradoamatoredev@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/amatorecorrado/lvr_bulk_downloader/issues"
