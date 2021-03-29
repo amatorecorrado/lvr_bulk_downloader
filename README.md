@@ -23,6 +23,18 @@
 
 <br>
 
+## Installation
+
+<br>
+
+```bash
+   npm install lvr_bulk_downloader --save
+```
+
+<br>
+
+<br>
+
 ## Simple bulk downalod use
 
 <br>
