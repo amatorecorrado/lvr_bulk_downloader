@@ -28,7 +28,7 @@
 <br>
 
 ```bash
-   npm install lvr_bulk_downloader --save
+   npm i lvr_bulk_downloader --save
 ```
 
 <br>
@@ -38,7 +38,7 @@
 <br>
 
 ```typescript
-   const {Downloader} = require("lvr_bulk_downloader");
+   import { Downloader, DownloaderTypes } from 'lvr_bulk_downloader';
 ```
 
 <br>
@@ -49,8 +49,8 @@
 
 ```typescript
     const files =  [ 
-        new InputFile('http://host.domain/dir/file.ext'), 
-        new InputFile('http://host.domain/dir/file2.ext')
+        new DownloaderTypes.InputFile('http://host.domain/dir/file.ext'), 
+        new DownloaderTypes.InputFile('http://host.domain/dir/file2.ext')
         ];
     const downloader = new Downloader();
     downloader.run(files);
@@ -64,20 +64,20 @@
 
 ```typescript
     const files =  [ 
-        new InputFile('http://host.domain/dir/file.ext', './download/file.ext'), 
-        new InputFile('http://host.domain/dir/file2.ext', './download/dir/file2.ext'), 
-        new InputFile('http://host.domain/dir/file3.ext', './download/dir/file3.ext')
+        new DownloaderTypes.InputFile('http://host.domain/dir/file.ext', './download/file.ext'), 
+        new DownloaderTypes.InputFile('http://host.domain/dir/file2.ext', './download/dir/file2.ext'), 
+        new DownloaderTypes.InputFile('http://host.domain/dir/file3.ext', './download/dir/file3.ext')
         ];
     
-    const options = new Options();
+    const options = new DownloaderTypes.Options();
     options.output_directory = './download/';
-    options.debug_mode = DebugMode.DEBUG;
+    options.debug_mode = DownloaderTypes.DebugMode.DEBUG;
     options.retry_times = 3;
 
     const downloader = new Downloader(options);
-    downloader.run(files, function(output: OutputFile[]){
-        const downloadedCount = output.filter(x=>x.response?.status == Status.OK).length;
-        const errorCount = output.filter(x=>x.response?.status == Status.KO).length;
+    downloader.run(files, function(output: DownloaderTypes.OutputFile[]){
+        const downloadedCount = output.filter(x=>x.response?.status == DownloaderTypes.Status.OK).length;
+        const errorCount = output.filter(x=>x.response?.status == DownloaderTypes.Status.KO).length;
     });
 ```
 
@@ -89,8 +89,8 @@
 
 ```typescript
     const files =  [ 
-        new InputFile('http://host.domain/dir/file.ext'), 
-        new InputFile('http://host.domain/dir/file2.ext')
+        new DownloaderTypes.InputFile('http://host.domain/dir/file.ext'), 
+        new DownloaderTypes.InputFile('http://host.domain/dir/file2.ext')
         ];
     const downloader = new Downloader();
     await downloader.run(files);
@@ -103,7 +103,7 @@
 <br>
 
 ```typescript
-    var file = new InputFile('http://host.domain/dir/file.ext');
+    var file = new DownloaderTypes.InputFile('http://host.domain/dir/file.ext');
     var downloader = new Downloader();
     downloader.run(file);
 ```
@@ -113,6 +113,7 @@
 <br>
 
 ## Types definition
+### Types are contained in module DownloaderTypes
 
 <br>
 
