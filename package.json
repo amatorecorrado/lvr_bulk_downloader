@@ -1,6 +1,6 @@
 {
   "name": "lvr_bulk_downloader",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Bulk downloader sync or async, retring configuration and flat or tree directories output.",
   "keywords": [
     "downloader",
@@ -17,6 +17,7 @@
     "response"
   ],
   "main": "dist/src/index.js",
+  "types": "types/lvr_bulk_downloader/index.d.ts",
   "scripts": {
     "start": "tsc && node dist/src/index.js",
     "build": "tsc",
