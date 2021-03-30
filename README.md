@@ -33,6 +33,14 @@
 
 <br>
 
+## Import
+
+<br>
+
+```typescript
+   const {Downloader} = require("lvr_bulk_downloader");
+```
+
 <br>
 
 ## Simple bulk downalod use

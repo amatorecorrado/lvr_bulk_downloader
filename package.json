@@ -1,6 +1,6 @@
 {
   "name": "lvr_bulk_downloader",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Bulk downloader sync or async, retring configuration and flat or tree directories output.",
   "keywords": [
     "downloader",
