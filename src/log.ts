@@ -1,9 +1,9 @@
 
-import {DebugMode} from './options'
+import {DownloaderTypes} from './index'
 
 export class Log{
-    static write(msg: string, mode: DebugMode, level: DebugMode){
-        if(mode == DebugMode.DEBUG || mode == level){
+    static write(msg: string, mode: DownloaderTypes.DebugMode, level: DownloaderTypes.DebugMode){
+        if(mode == DownloaderTypes.DebugMode.DEBUG || mode == level){
             console.log("Downloader --> " + msg);
         }
     }

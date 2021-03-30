@@ -36,24 +36,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//import { Downloader, DownloaderTypes } from ".";
+//import { DebugMode, Downloader, InputFile, Options, OutputFile, Status } from "./index";
+//const Downloader = require("./index")
 var index_1 = require("./index");
+//import {Downloader, DownloaderTypes} from "./dist/src/index"
 var fileURL = "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg";
 var files = [
-    new index_1.InputFile(fileURL, "./download/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/0/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/1/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/2/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/3/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/4/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/5/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/6/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/7/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/8/image.jpg"),
-    new index_1.InputFile(fileURL, "./download/9/image.jpg")
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/0/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/1/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/2/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/3/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/4/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/5/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/6/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/7/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/8/image.jpg"),
+    new index_1.DownloaderTypes.InputFile(fileURL, "./download/9/image.jpg")
 ];
-var options = new index_1.Options();
+var options = new index_1.DownloaderTypes.Options();
 options.output_directory = './download/';
-options.debug_mode = index_1.DebugMode.DEBUG;
+options.debug_mode = index_1.DownloaderTypes.DebugMode.DEBUG;
 options.retry_times = 3;
 function test() {
     return __awaiter(this, void 0, void 0, function () {
@@ -63,8 +67,8 @@ function test() {
                 case 0:
                     downloader = new index_1.Downloader(options);
                     return [4 /*yield*/, downloader.run(files, function (output) {
-                            var downloadedCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.Status.OK; }).length;
-                            var errorCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.Status.KO; }).length;
+                            var downloadedCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.DownloaderTypes.Status.OK; }).length;
+                            var errorCount = output.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.DownloaderTypes.Status.KO; }).length;
                             console.debug("Downloaded " + downloadedCount + " files with " + errorCount + " errors");
                         })];
                 case 1:
@@ -80,7 +84,7 @@ function easyTest() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    files = [new index_1.InputFile(fileURL)];
+                    files = [new index_1.DownloaderTypes.InputFile(fileURL)];
                     downloader = new index_1.Downloader();
                     return [4 /*yield*/, downloader.run(files)];
                 case 1:
@@ -96,7 +100,7 @@ function singleTest() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    files = new index_1.InputFile(fileURL);
+                    files = new index_1.DownloaderTypes.InputFile(fileURL);
                     downloader = new index_1.Downloader();
                     return [4 /*yield*/, downloader.run(files)];
                 case 1:
