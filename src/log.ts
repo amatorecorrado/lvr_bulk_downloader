@@ -21,8 +21,8 @@ export class Log{
             Log.write("File size: " + output_file.fileInfo?.size, mode, DownloaderTypes.DebugMode.DEBUG)
             Log.write("*********************************", mode, DownloaderTypes.DebugMode.DEBUG)
          }else{
-            Log.write("********** File skypped *********" + output_file.url + " ,output_path: " + output_file.path, mode, DownloaderTypes.DebugMode.DEBUG)
-            Log.write("From url: " + output_file.url + " ,output_path: " + output_file.path, mode, DownloaderTypes.DebugMode.DEBUG)
+            Log.write("********** File skypped *********", mode, DownloaderTypes.DebugMode.DEBUG)
+            Log.write("From url: " + output_file.url, mode, DownloaderTypes.DebugMode.DEBUG)
             Log.write("*********************************", mode, DownloaderTypes.DebugMode.DEBUG)
         }
     }

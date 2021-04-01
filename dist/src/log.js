@@ -23,8 +23,8 @@ var Log = /** @class */ (function () {
             Log.write("*********************************", mode, index_1.DownloaderTypes.DebugMode.DEBUG);
         }
         else {
-            Log.write("********** File skypped *********" + output_file.url + " ,output_path: " + output_file.path, mode, index_1.DownloaderTypes.DebugMode.DEBUG);
-            Log.write("From url: " + output_file.url + " ,output_path: " + output_file.path, mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("********** File skypped *********", mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("From url: " + output_file.url, mode, index_1.DownloaderTypes.DebugMode.DEBUG);
             Log.write("*********************************", mode, index_1.DownloaderTypes.DebugMode.DEBUG);
         }
     };
