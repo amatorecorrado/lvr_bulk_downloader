@@ -11,7 +11,7 @@ var DownloaderTypes;
     var Options = /** @class */ (function () {
         function Options() {
             this.retry_times = 3;
-            this.debug_mode = DebugMode.LOG;
+            this.debug_mode = DebugMode.DEBUG;
             this.output_directory = './download/'; //MUST BE SET IN CASE OF FLAT MODE
         }
         return Options;
