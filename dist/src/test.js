@@ -43,17 +43,17 @@ var index_1 = require("./index");
 //import {Downloader, DownloaderTypes} from "./dist/src/index"
 var fileURL = "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg";
 var files = [
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/0/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/1/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/2/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/3/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/4/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/5/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/6/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/7/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/8/image.jpg"),
-    new index_1.DownloaderTypes.InputFile(fileURL, "./download/9/image.jpg")
+    { url: fileURL, output_path: "./download/image.jpg" },
+    { url: fileURL, output_path: "./download/0/image.jpg" },
+    { url: fileURL, output_path: "./download/1/image.jpg" },
+    { url: fileURL, output_path: "./download/2/image.jpg" },
+    { url: fileURL, output_path: "./download/3/image.jpg" },
+    { url: fileURL, output_path: "./download/4/image.jpg" },
+    { url: fileURL, output_path: "./download/5/image.jpg" },
+    { url: fileURL, output_path: "./download/6/image.jpg" },
+    { url: fileURL, output_path: "./download/7/image.jpg" },
+    { url: fileURL, output_path: "./download/8/image.jpg" },
+    { url: fileURL, output_path: "./download/9/image.jpg" },
 ];
 var options = new index_1.DownloaderTypes.Options();
 options.output_directory = './download/';
@@ -84,7 +84,7 @@ function easyTest() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    files = [new index_1.DownloaderTypes.InputFile(fileURL)];
+                    files = [{ url: fileURL }];
                     downloader = new index_1.Downloader();
                     return [4 /*yield*/, downloader.run(files)];
                 case 1:
@@ -100,7 +100,7 @@ function singleTest() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    files = new index_1.DownloaderTypes.InputFile(fileURL);
+                    files = { url: fileURL };
                     downloader = new index_1.Downloader();
                     return [4 /*yield*/, downloader.run(files)];
                 case 1:
@@ -110,7 +110,7 @@ function singleTest() {
         });
     });
 }
-//singleTest()
-//easyTest()
+singleTest();
+easyTest();
 test();
 //# sourceMappingURL=test.js.map

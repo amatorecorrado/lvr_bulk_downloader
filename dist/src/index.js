@@ -47,7 +47,7 @@ var log_1 = require("./log");
 var Downloader = /** @class */ (function () {
     function Downloader(options) {
         if (options === void 0) { options = null; }
-        this.files = [];
+        this.input_files = [];
         this.output_files = [];
         this.total_files = 0;
         this.options = new downloader_types_1.DownloaderTypes.Options();
@@ -55,19 +55,19 @@ var Downloader = /** @class */ (function () {
         if (options)
             this.options = options;
     }
-    Downloader.prototype.run = function (files, callback) {
+    Downloader.prototype.run = function (input_files, callback) {
         if (callback === void 0) { callback = null; }
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (files instanceof downloader_types_1.DownloaderTypes.InputFile) {
-                            this.total_files = 1;
-                            this.files.push(files);
+                        if (input_files instanceof Array) {
+                            this.total_files = input_files.length;
+                            this.input_files = input_files;
                         }
                         else {
-                            this.total_files = files.length;
-                            this.files = files;
+                            this.total_files = 1;
+                            this.input_files.push(input_files);
                         }
                         return [4 /*yield*/, this.checkAndDownload(callback)];
                     case 1:
@@ -87,8 +87,13 @@ var Downloader = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         parent = this;
-                        if (!(this.files instanceof Array && this.files.length > 0)) return [3 /*break*/, 6];
-                        output_file_1 = new downloader_types_1.DownloaderTypes.OutputFileClass(this.files[0].url, this.files[0].output_path);
+                        if (!(this.input_files instanceof Array && this.input_files.length > 0)) return [3 /*break*/, 6];
+                        output_file_1 = { url: this.input_files[0].url,
+                            path: this.input_files[0].output_path,
+                            retry_times: -1,
+                            fileInfo: null,
+                            response: null
+                        };
                         outputDir = this.options.output_directory;
                         if (output_file_1.path != null) {
                             outputFileName = output_file_1.path;
@@ -101,7 +106,6 @@ var Downloader = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 3, , 5]);
                         return [4 /*yield*/, this.download(output_file_1.url, output_file_1.path).then(function (response) { return __awaiter(_this, void 0, void 0, function () {
-                                var dowloadedCount;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
@@ -111,16 +115,14 @@ var Downloader = /** @class */ (function () {
                                                 output_file_1.fileInfo = response.message;
                                                 response.message = null;
                                                 output_file_1.response = response;
-                                                parent.files.splice(0, 1)[0]; //REMOVE FROM INPUT
+                                                parent.input_files.splice(0, 1)[0]; //REMOVE FROM INPUT
                                                 parent.output_files.push(output_file_1);
-                                                dowloadedCount = parent.output_files.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == downloader_types_1.DownloaderTypes.Status.OK; }).length;
-                                                log_1.Log.write("File downloaded correctly: " + output_file_1.url, parent.options.debug_mode, downloader_types_1.DownloaderTypes.DebugMode.DEBUG);
-                                                log_1.Log.write("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options.debug_mode, downloader_types_1.DownloaderTypes.DebugMode.LOG);
+                                                log_1.Log.singleFileStats(output_file_1, parent.output_files, parent.total_files, parent.options.debug_mode);
                                             }
                                             else if (response.status == downloader_types_1.DownloaderTypes.Status.KO && output_file_1.retry_times == parent.options.retry_times) {
-                                                parent.files.splice(0, 1)[0]; //REMOVE FROM INPUT
+                                                parent.input_files.splice(0, 1)[0]; //REMOVE FROM INPUT
                                                 parent.output_files.push(output_file_1);
-                                                log_1.Log.write("File skypped: url: " + output_file_1.url + " ,output_path: " + output_file_1.path, parent.options.debug_mode, downloader_types_1.DownloaderTypes.DebugMode.DEBUG);
+                                                log_1.Log.singleFileStats(output_file_1, parent.output_files, parent.total_files, parent.options.debug_mode);
                                             }
                                             return [4 /*yield*/, parent.checkAndDownload(callback)];
                                         case 1:
@@ -135,10 +137,10 @@ var Downloader = /** @class */ (function () {
                     case 3:
                         error_1 = _a.sent();
                         output_file_1.retry_times += 1;
-                        output_file_1.response = new downloader_types_1.DownloaderTypes.Response(downloader_types_1.DownloaderTypes.Status.KO, error_1);
-                        parent.files.splice(0, 1)[0]; //REMOVE FROM INPUT
+                        output_file_1.response = { status: downloader_types_1.DownloaderTypes.Status.KO, message: error_1 };
+                        parent.input_files.splice(0, 1)[0]; //REMOVE FROM INPUT
                         parent.output_files.push(output_file_1);
-                        log_1.Log.write("File skypped: url: " + output_file_1.url + " ,output_path: " + output_file_1.path, parent.options.debug_mode, downloader_types_1.DownloaderTypes.DebugMode.DEBUG);
+                        log_1.Log.singleFileStats(output_file_1, parent.output_files, parent.total_files, parent.options.debug_mode);
                         return [4 /*yield*/, parent.checkAndDownload(callback)];
                     case 4:
                         _a.sent();
@@ -175,7 +177,7 @@ var Downloader = /** @class */ (function () {
                             });
                             var request = proto.get(url, function (response) {
                                 if (response.statusCode !== 200) {
-                                    reject(new downloader_types_1.DownloaderTypes.Response(downloader_types_1.DownloaderTypes.Status.KO, response.statusCode));
+                                    reject({ status: downloader_types_1.DownloaderTypes.Status.KO, message: response.statusCode });
                                     return;
                                 }
                                 var fileInfo = {
@@ -187,20 +189,20 @@ var Downloader = /** @class */ (function () {
                                 // The destination stream is ended by the time it's called
                                 file.on('finish', function () {
                                     file.close();
-                                    resolve(new downloader_types_1.DownloaderTypes.Response(downloader_types_1.DownloaderTypes.Status.OK, fileInfo));
+                                    resolve({ status: downloader_types_1.DownloaderTypes.Status.OK, message: fileInfo });
                                 });
                                 file.on('error', function (err) {
                                     file.close();
-                                    fs.unlink(filePath, function () { return reject(new downloader_types_1.DownloaderTypes.Response(downloader_types_1.DownloaderTypes.Status.KO, err)); });
+                                    fs.unlink(filePath, function () { return reject({ status: downloader_types_1.DownloaderTypes.Status.KO, message: err }); });
                                 });
                             });
                             request.on('error', function (err) {
-                                fs.unlink(filePath, function () { return reject(new downloader_types_1.DownloaderTypes.Response(downloader_types_1.DownloaderTypes.Status.KO, err)); });
+                                fs.unlink(filePath, function () { return reject({ status: downloader_types_1.DownloaderTypes.Status.KO, message: err }); });
                             });
                             request.end();
                         }
                         catch (error) {
-                            fs.unlink(filePath, function () { return reject(new downloader_types_1.DownloaderTypes.Response(downloader_types_1.DownloaderTypes.Status.KO, error)); });
+                            fs.unlink(filePath, function () { return reject({ status: downloader_types_1.DownloaderTypes.Status.KO, message: error }); });
                         }
                     })];
             });
@@ -210,7 +212,7 @@ var Downloader = /** @class */ (function () {
         return !url.charAt(4).localeCompare('s') ? https : http;
     };
     Downloader.prototype.clear = function () {
-        this.files = [];
+        this.input_files = [];
         this.output_files = [];
         this.total_files = 0;
     };

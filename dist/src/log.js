@@ -10,6 +10,24 @@ var Log = /** @class */ (function () {
             console.log("Downloader --> " + msg);
         }
     };
+    Log.singleFileStats = function (output_file, output_files, total_files, mode) {
+        var _a, _b, _c;
+        if (((_a = output_file.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.DownloaderTypes.Status.OK) {
+            var dowloadedCount = output_files.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.DownloaderTypes.Status.OK; }).length;
+            Log.write("Downloaded " + dowloadedCount + " of " + total_files, mode, index_1.DownloaderTypes.DebugMode.LOG);
+            Log.write("*** File downloaded correctly ***", mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("From url: " + output_file.url, mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("To path: " + output_file.path, mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("File mime type: " + ((_b = output_file.fileInfo) === null || _b === void 0 ? void 0 : _b.mime), mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("File size: " + ((_c = output_file.fileInfo) === null || _c === void 0 ? void 0 : _c.size), mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("*********************************", mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+        }
+        else {
+            Log.write("********** File skypped *********" + output_file.url + " ,output_path: " + output_file.path, mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("From url: " + output_file.url + " ,output_path: " + output_file.path, mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+            Log.write("*********************************", mode, index_1.DownloaderTypes.DebugMode.DEBUG);
+        }
+    };
     return Log;
 }());
 exports.Log = Log;
