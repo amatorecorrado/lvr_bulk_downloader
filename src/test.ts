@@ -8,17 +8,17 @@ import {Downloader, DownloaderTypes} from "./index"
 const fileURL =  "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg"
 
 var files =  [
-  new DownloaderTypes.InputFile(fileURL, "./download/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/0/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/1/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/2/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/3/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/4/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/5/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/6/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/7/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/8/image.jpg"),
-  new DownloaderTypes.InputFile(fileURL, "./download/9/image.jpg")
+    {url: fileURL, output_path: "./download/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/0/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/1/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/2/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/3/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/4/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/5/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/6/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/7/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/8/image.jpg"} as DownloaderTypes.InputFile,
+    {url: fileURL, output_path: "./download/9/image.jpg"} as DownloaderTypes.InputFile,
 ]
 
 const options = new DownloaderTypes.Options();
@@ -36,17 +36,17 @@ async function test(){
 }
 
 async function easyTest() {
-    const files =  [ new DownloaderTypes.InputFile(fileURL) ]
+    const files =  [{url: fileURL} as DownloaderTypes.InputFile]
     const downloader = new Downloader()
     await downloader.run(files)
 }
 
 async function singleTest() {
-    const files =  new DownloaderTypes.InputFile(fileURL)
+    const files = {url: fileURL} as DownloaderTypes.InputFile
     const downloader = new Downloader()
     await downloader.run(files)
 }
 
-//singleTest()
-//easyTest()
+singleTest()
+easyTest()
 test()

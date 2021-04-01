@@ -1,32 +1,16 @@
 export namespace DownloaderTypes{
-    export class OutputFileClass implements OutputFile{
-        url: string
-        path: string | null
-        retry_times: number = -1
-        fileInfo: FileInfo | null = null
-        response: Response | null = null
     
-        constructor(u: string, p: string | null = null){
-            this.url = u
-            this.path = p
-        }
+    export interface OutputFile{
+        url: string 
+        path: string | null 
+        retry_times: number
+        fileInfo: FileInfo | null 
+        response: Response | null
     }
     
-    export class OutputFile{
-        url: string | null = null
-        path: string | null = null
-        retry_times: number = -1
-        fileInfo: FileInfo | null = null
-        response: Response | null = null
-    }
-    
-    export class Response {
-        status: Status; //OK,KO
+    export interface Response {
+        status: Status;
         message: any;
-        constructor(s: Status, m: any = null){
-                this.status = s
-                this.message = m
-        }
     }
     
     export enum Status{
@@ -39,13 +23,9 @@ export namespace DownloaderTypes{
         size: Number
     }
     
-    export class InputFile{
+    export interface InputFile{
         url: string
         output_path: string | null
-        constructor(u: string, p: string | null = null){
-            this.url = u
-            this.output_path = p
-        }
     }
     
     export class Options{
