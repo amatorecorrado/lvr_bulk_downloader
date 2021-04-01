@@ -26,4 +26,16 @@ export class Log{
             Log.write("*********************************", mode, DownloaderTypes.DebugMode.DEBUG)
         }
     }
+
+    static allFilesStats(output_files: DownloaderTypes.OutputFile[], total_files: number, mode: DownloaderTypes.DebugMode){
+        let errorCount = output_files.filter(x=>x.response?.status == DownloaderTypes.Status.KO).length;
+            let retryCount = output_files.filter(x=>x.retry_times > 1).length;
+            let dowloadedCount = output_files.filter(x=>x.response?.status == DownloaderTypes.Status.OK).length;
+
+            Log.write("Downloaded "+ dowloadedCount + 
+                    " files, " + errorCount + 
+                    " errors and " + retryCount + 
+                    " retried of total " + total_files + " files", 
+                    mode, DownloaderTypes.DebugMode.LOG)
+    }
 }

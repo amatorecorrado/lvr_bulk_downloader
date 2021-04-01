@@ -81,7 +81,7 @@ var Downloader = /** @class */ (function () {
     Downloader.prototype.checkAndDownload = function (callback) {
         if (callback === void 0) { callback = null; }
         return __awaiter(this, void 0, void 0, function () {
-            var parent, output_file_1, outputDir, outputFileName, error_1, errorCount, retryCount, dowloadedCount;
+            var parent, output_file_1, outputDir, outputFileName, error_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -147,12 +147,7 @@ var Downloader = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 5: return [3 /*break*/, 7];
                     case 6:
-                        errorCount = parent.output_files.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == downloader_types_1.DownloaderTypes.Status.KO; }).length;
-                        retryCount = parent.output_files.filter(function (x) { return x.retry_times > 1; }).length;
-                        dowloadedCount = parent.output_files.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == downloader_types_1.DownloaderTypes.Status.OK; }).length;
-                        log_1.Log.write("Downloaded " + dowloadedCount +
-                            " files, " + errorCount +
-                            " errors and " + retryCount + " retried", parent.options.debug_mode, downloader_types_1.DownloaderTypes.DebugMode.LOG);
+                        log_1.Log.allFilesStats(parent.output_files, parent.total_files, parent.options.debug_mode);
                         //callback(parent.output_files)
                         if (callback != null) {
                             callback(parent.output_files);

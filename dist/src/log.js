@@ -28,6 +28,15 @@ var Log = /** @class */ (function () {
             Log.write("*********************************", mode, index_1.DownloaderTypes.DebugMode.DEBUG);
         }
     };
+    Log.allFilesStats = function (output_files, total_files, mode) {
+        var errorCount = output_files.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.DownloaderTypes.Status.KO; }).length;
+        var retryCount = output_files.filter(function (x) { return x.retry_times > 1; }).length;
+        var dowloadedCount = output_files.filter(function (x) { var _a; return ((_a = x.response) === null || _a === void 0 ? void 0 : _a.status) == index_1.DownloaderTypes.Status.OK; }).length;
+        Log.write("Downloaded " + dowloadedCount +
+            " files, " + errorCount +
+            " errors and " + retryCount +
+            " retried of total " + total_files + " files", mode, index_1.DownloaderTypes.DebugMode.LOG);
+    };
     return Log;
 }());
 exports.Log = Log;

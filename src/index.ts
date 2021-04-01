@@ -79,15 +79,7 @@ export class Downloader{
                 await parent.checkAndDownload(callback)
             }   
         }else{
-            let errorCount = parent.output_files.filter(x=>x.response?.status == DownloaderTypes.Status.KO).length;
-            let retryCount = parent.output_files.filter(x=>x.retry_times > 1).length;
-            let dowloadedCount = parent.output_files.filter(x=>x.response?.status == DownloaderTypes.Status.OK).length;
-
-            Log.write("Downloaded "+ dowloadedCount + 
-                    " files, " + errorCount + 
-                    " errors and " + retryCount + " retried", 
-                    parent.options.debug_mode, DownloaderTypes.DebugMode.LOG)
-
+            Log.allFilesStats(parent.output_files, parent.total_files, parent.options.debug_mode)
             //callback(parent.output_files)
             if(callback != null){
                 callback(parent.output_files)
