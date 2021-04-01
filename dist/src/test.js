@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./index");
 //import {Downloader, DownloaderTypes} from "./dist/src/index"
 var fileURL = "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg";
+var wrongFileURL = "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1_WRONG.jpg";
 var files = [
     { url: fileURL, output_path: "./download/image.jpg" },
     { url: fileURL, output_path: "./download/0/image.jpg" },
@@ -110,7 +111,24 @@ function singleTest() {
         });
     });
 }
+function errorTest() {
+    return __awaiter(this, void 0, void 0, function () {
+        var files, downloader;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    files = { url: wrongFileURL };
+                    downloader = new index_1.Downloader();
+                    return [4 /*yield*/, downloader.run(files)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
 singleTest();
 easyTest();
+errorTest();
 test();
 //# sourceMappingURL=test.js.map

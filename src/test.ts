@@ -6,6 +6,7 @@ import {Downloader, DownloaderTypes} from "./index"
 //import {Downloader, DownloaderTypes} from "./dist/src/index"
 
 const fileURL =  "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg"
+const wrongFileURL =  "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1_WRONG.jpg"
 
 var files =  [
     {url: fileURL, output_path: "./download/image.jpg"} as DownloaderTypes.InputFile,
@@ -47,6 +48,13 @@ async function singleTest() {
     await downloader.run(files)
 }
 
+async function errorTest() {
+    const files = {url: wrongFileURL} as DownloaderTypes.InputFile
+    const downloader = new Downloader()
+    await downloader.run(files)
+}
+
 singleTest()
 easyTest()
+errorTest()
 test()
