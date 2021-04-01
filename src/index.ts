@@ -57,13 +57,11 @@ export class Downloader{
                         output_file.response = response
                         parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
                         parent.output_files.push(output_file);
-                        let dowloadedCount = parent.output_files.filter(x=>x.response?.status == DownloaderTypes.Status.OK).length;
-                        Log.write("File downloaded correctly: " + output_file.url, parent.options.debug_mode, DownloaderTypes.DebugMode.DEBUG)
-                        Log.write("Downloaded " + dowloadedCount + " of " + parent.total_files, parent.options.debug_mode, DownloaderTypes.DebugMode.LOG)
+                        Log.singleFileStats(output_file, parent.output_files, parent.total_files, parent.options.debug_mode)
                     }else if(response.status == DownloaderTypes.Status.KO && output_file.retry_times == parent.options.retry_times){
                         parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
                         parent.output_files.push(output_file);
-                        Log.write("File skypped: url: " + output_file.url + " ,output_path: " + output_file.path, parent.options.debug_mode, DownloaderTypes.DebugMode.DEBUG)
+                        Log.singleFileStats(output_file, parent.output_files, parent.total_files, parent.options.debug_mode)
                     }
                     await parent.checkAndDownload(callback)
                 });
@@ -72,7 +70,7 @@ export class Downloader{
                 output_file.response = new DownloaderTypes.Response(DownloaderTypes.Status.KO, error)
                 parent.files.splice(0, 1)[0]  //REMOVE FROM INPUT
                 parent.output_files.push(output_file);
-                Log.write("File skypped: url: " + output_file.url + " ,output_path: " + output_file.path, parent.options.debug_mode, DownloaderTypes.DebugMode.DEBUG)
+                Log.singleFileStats(output_file, parent.output_files, parent.total_files, parent.options.debug_mode)
                 await parent.checkAndDownload(callback)
             }   
         }else{
